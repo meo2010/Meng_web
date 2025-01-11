@@ -27,12 +27,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     displayStory(file.name, this.dataset.content);
                 });
             };
-            reader.readAsText(file);
+            // Specify UTF-8 encoding when reading the file
+            reader.readAsText(file, 'UTF-8');
         }
     });
 
     function displayStory(title, content) {
         currentStoryTitle.textContent = title;
-        storyDisplay.textContent = content;
+        storyDisplay.innerHTML = content.replace(/\n/g, '<br>'); // Convert newlines to <br> tags
     }
 });
