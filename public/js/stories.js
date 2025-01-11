@@ -4,36 +4,90 @@ document.addEventListener('DOMContentLoaded', function() {
     const storyList = document.getElementById('storyList');
     const storyDisplay = document.getElementById('storyDisplay');
     const currentStoryTitle = document.getElementById('currentStoryTitle');
+    const deleteBtn = document.getElementById('deleteBtn');
+    
+    let currentStoryElement = null;
 
-    // Handle file upload button
-    uploadBtn.addEventListener('click', function() {
-        fileInput.click();
-    });
+    // Load existing stories when page loads
+    loadStories();
 
-    // Handle file selection
-    fileInput.addEventListener('change', function(e) {
+    async function loadStories() {
+        try {
+            const response = await fetch('/api/stories');
+            const stories = await response.json();
+            storyList.innerHTML = '';
+            stories.forEach(story => {
+                addStoryToList(story);
+            });
+        } catch (err) {
+            console.error('Error loading stories:', err);
+        }
+    }
+
+    function addStoryToList(story) {
+        const listItem = document.createElement('li');
+        listItem.textContent = story.title;
+        listItem.dataset.id = story.id;
+        listItem.dataset.content = story.content;
+        listItem.addEventListener('click', () => displayStory(listItem, story));
+        storyList.appendChild(listItem);
+    }
+
+    uploadBtn.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', async function(e) {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                // Add story to list
-                const listItem = document.createElement('li');
-                listItem.textContent = file.name;
-                listItem.dataset.content = e.target.result;
-                storyList.appendChild(listItem);
-
-                // Add click handler to display story
-                listItem.addEventListener('click', function() {
-                    displayStory(file.name, this.dataset.content);
-                });
+            reader.onload = async function(e) {
+                try {
+                    const response = await fetch('/api/stories', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            title: file.name,
+                            content: e.target.result
+                        })
+                    });
+                    const story = await response.json();
+                    addStoryToList(story);
+                } catch (err) {
+                    console.error('Error saving story:', err);
+                }
             };
-            // Specify UTF-8 encoding when reading the file
             reader.readAsText(file, 'UTF-8');
         }
     });
 
-    function displayStory(title, content) {
-        currentStoryTitle.textContent = title;
-        storyDisplay.innerHTML = content.replace(/\n/g, '<br>'); // Convert newlines to <br> tags
+    deleteBtn.addEventListener('click', async function() {
+        if (currentStoryElement && confirm('Are you sure you want to delete this story?')) {
+            try {
+                await fetch(`/api/stories/${currentStoryElement.dataset.id}`, {
+                    method: 'DELETE'
+                });
+                currentStoryElement.remove();
+                currentStoryTitle.textContent = 'Select a Story';
+                storyDisplay.textContent = '';
+                deleteBtn.style.display = 'none';
+                currentStoryElement = null;
+            } catch (err) {
+                console.error('Error deleting story:', err);
+            }
+        }
+    });
+
+    function displayStory(element, story) {
+        currentStoryElement = element;
+        currentStoryTitle.textContent = story.title;
+        storyDisplay.innerHTML = story.content.replace(/\n/g, '<br>');
+        deleteBtn.style.display = 'block';
+        
+        const allStories = storyList.getElementsByTagName('li');
+        for (let story of allStories) {
+            story.classList.remove('selected');
+        }
+        element.classList.add('selected');
     }
 });
