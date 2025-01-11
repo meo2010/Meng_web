@@ -9,7 +9,7 @@ app.use(express.static('public'));
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/views/index.html');
 });
-app.get('/photos',(req,res)=>{res.sendFile(__dirname+'/views/photos')});
+app.get('/photos',(req,res)=>{res.sendFile(__dirname+'/views/photos.html')});
 // Start the server
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
