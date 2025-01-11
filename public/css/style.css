@@ -63,11 +63,22 @@ footer {
     justify-content: center;
     align-items: center;
     margin: 2rem 0;
+    height: calc(100vh - 200px);
 }
 
 .photo-gallery img {
     max-width: 100%;
-    height: auto;
+    max-height: 100%;
+    object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.header-section {
+    margin-bottom: 1rem;
+}
+
+.photo-description {
+    color: #666;
+    font-style: italic;
+    margin-top: 0.5rem;
 }
