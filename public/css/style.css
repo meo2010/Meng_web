@@ -63,7 +63,7 @@ footer {
     justify-content: center;
     align-items: center;
     margin: 2rem 0;
-    height: calc(100vh - 200px);
+    height: 75vh;
 }
 
 .photo-gallery img {
@@ -81,4 +81,5 @@ footer {
     color: #666;
     font-style: italic;
     margin-top: 0.5rem;
+    text-align: center;
 }
