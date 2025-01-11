@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stories - MengCSH</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/stories.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/photos">Photos</a></li>
+                <li><a href="/videos">Videos</a></li>
+                <li><a href="/stories">Stories</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="stories-container">
+        <div class="stories-sidebar">
+            <div class="upload-section">
+                <button id="uploadBtn" class="upload-btn">Upload Story</button>
+                <input type="file" id="fileInput" style="display: none;" accept=".txt,.doc,.docx">
+            </div>
+            <div class="stories-list">
+                <h3>My Stories</h3>
+                <ul id="storyList">
+                    <!-- Stories will be added here dynamically -->
+                </ul>
+            </div>
+        </div>
+        
+        <div class="story-content">
+            <h2 id="currentStoryTitle">Select a Story</h2>
+            <div id="storyDisplay">
+                <!-- Story content will be displayed here -->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 MengCSH. All rights reserved.</p>
+    </footer>
+
+    <script src="/js/stories.js"></script>
+</body>
+</html>
